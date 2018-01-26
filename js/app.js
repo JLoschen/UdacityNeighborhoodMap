@@ -5,13 +5,13 @@
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
             center: {lat:43.099257, lng: -93.601806},//Garner Iowa
-            zoom: 13,
+            zoom: 15,
             mapTypeControl: false
         });
         var locations = [
-            {title: 'St Paul Lutheran Church', location: {lat: 43.097643, lng: -93.602245}},
-            {title: 'Garner Water Tower', location: {lat: 43.096090, lng: -93.602274}},
-            {title: 'Veteran\'s Memorial Recreational Center', location: {lat: 43.097726, lng: -93.605354}}
+            { title: 'St Paul Lutheran Church', location: { lat: 43.097643, lng: -93.602245}},
+            { title: 'Garner Water Tower', location: { lat: 43.096090, lng: -93.602274}},
+            { title: 'Veteran\'s Memorial Recreational Center', location: { lat: 43.097726, lng: -93.605354}}
         ];
 
         var largeInfowindow = new google.maps.InfoWindow();
@@ -33,9 +33,16 @@
                 populateInfoWindow(this, largeInfowindow);
             });
         }
-        document.getElementById('show-listings').addEventListener('click', showListings);
-        document.getElementById('hide-listings').addEventListener('click', hideListings);
-      }
+
+        showListings();
+        // document.getElementById('show-listings').addEventListener('click', showListings);
+        // document.getElementById('hide-listings').addEventListener('click', hideListings);
+
+        
+        var viewModel = new ViewModel(locations);
+        
+        ko.applyBindings(viewModel);
+    }
 
     function populateInfoWindow(marker, infowindow) {
         if (infowindow.marker != marker) {
@@ -56,7 +63,7 @@
             markers[i].setMap(map);
             bounds.extend(markers[i].position);
         }
-        map.fitBounds(bounds);
+        //map.fitBounds(bounds);
     }
 
     function hideListings() {
@@ -65,22 +72,19 @@
         }
     }
 
-$(function (){
-    var data = [{name:"Bob"}, {name: "Josh"}, {name: "John"}];
-    var viewModel = {
-        testThing : function(){
-            console.log('button pressed');
-        },
-        list: ko.observableArray(data),
-        searchString:ko.observable('')
-    }
+function ViewModel(locations){
+    this.allLocations = locations;
+    this.searchString = ko.observable('');
 
-    ko.applyBindings(viewModel);
-
-
-    //stack overflow with the code for filtering in knockout
-    //https://stackoverflow.com/questions/29551997/knockout-search-filter
-})
+     //stack overflow with the code for filtering in knockout
+     //https://stackoverflow.com/questions/29551997/knockout-search-filter
+    this.filterPins = ko.computed(function () {
+        var search = this.searchString().toLowerCase();
+        return ko.utils.arrayFilter(this.allLocations, function (pin) {
+            return pin.title.toLowerCase().indexOf(search) >= 0;
+        });
+    }, this);
+}
 
 
 
