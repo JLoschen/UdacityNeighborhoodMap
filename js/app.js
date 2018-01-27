@@ -7,20 +7,16 @@
         {title: 'Golden Dragon Chinese Restaurant', fourSquareId: '4e4e5a14bd4101d0d7a85286'},
         {title: 'UW- Eau Claire', fourSquareId: '4da600c40c53054ed7b4df8e'},
     ];
+    var largeInfowindow; 
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat:43.099257, lng: -93.601806},//Garner Iowa
-            zoom: 15,
+            center: {lat:44.817178, lng: -91.511481},//Garner Iowa
+            zoom: 14,
             mapTypeControl: false
         });
-        // var locations = [
-        //     { title: 'St Paul Lutheran Church', location: { lat: 43.097643, lng: -93.602245}},
-        //     { title: 'Garner Water Tower', location: { lat: 43.096090, lng: -93.602274}},
-        //     { title: 'Veteran\'s Memorial Recreational Center', location: { lat: 43.097726, lng: -93.605354}}
-        // ];
 
-        var largeInfowindow = new google.maps.InfoWindow();
+        largeInfowindow = new google.maps.InfoWindow();
 
         // for (var i = 0; i < locations.length; i++) {
         //     var position = locations[i].location;
@@ -111,83 +107,114 @@ function MapViewModel(EauClaireLocations){
         });
     }, this);
 
-    //4ebd884c9adf8b96f93ed6aa
-    // var fourSquareId = '4da600c40c53054ed7b4df8e';
-    // var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=H3U143RXVFSPJE0XYGV2C2LUTZLPJVX4O3D4XKEKINMVMORJ&client_secret=GD2SHFG2LB1KWLZ45PUWKHGQ3MAW102ML3CVLOJDGKJV2UHB&v=20170413';
-    
-    // $.getJSON(url).done(function(data) {
-    //     //var result = data.response.venues[0];
-    //     console.log("response" + data.response.venue.toString());
-    // }).fail(function(){
-    //     alert('retreiving 4 square data failure');
-    // });
-
-    // fetch(url)
-    // .then((data) => data.json())
-    // .then((res) => {
-    //     console.log(res.response.venue.name.toString());
-    // })
-    // .catch((err) => {
-    //     alert('wtf man');
-    // });
-
-    //EauClaireLocations.forEach(function(loc){
     for(let i = 0; i < EauClaireLocations.length; i++){
-        var loc = EauClaireLocations[i];
-        var url = 'https://api.foursquare.com/v2/venues/' + loc.fourSquareId + '?client_id=H3U143RXVFSPJE0XYGV2C2LUTZLPJVX4O3D4XKEKINMVMORJ&client_secret=GD2SHFG2LB1KWLZ45PUWKHGQ3MAW102ML3CVLOJDGKJV2UHB&v=20170413';
+        var result = new EauClairePin(EauClaireLocations[i], i);
+    }
+    showListings();
+}
+
+class EauClairePin{
+    constructor(loc, index){
+        this.self = this;
+        this.title = loc.title;
+        this.fourSquareId = loc.fourSquareId;
+        this.index = index;
+        this.getFourSquareData(this.fourSquareId, this.title, this.index);
+    }
+
+    openInfoWindow(){
+        
+        if (largeInfowindow.marker != this.marker) {
+            
+            largeInfowindow.marker = this.marker;
+            var content = `<div>
+                                <div>${this.marker.title}</div>
+                                <div>${this.url}</div>
+                            </div>`;
+
+            largeInfowindow.setContent(content);
+            largeInfowindow.open(map, this.marker);
+
+            largeInfowindow.addListener('closeclick', function() {
+                largeInfowindow.marker = null;
+            });
+        }else{
+            console.log("they are equal" + largeInfowindow.marker + " marker" + this.marker);
+        }
+    }
+
+    getFourSquareData(fourSquareId, title ,index){
+        var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=H3U143RXVFSPJE0XYGV2C2LUTZLPJVX4O3D4XKEKINMVMORJ&client_secret=GD2SHFG2LB1KWLZ45PUWKHGQ3MAW102ML3CVLOJDGKJV2UHB&v=20170413';
+        
         fetch(url)
         .then((data) => data.json())
         .then((res) => {
-            //console.log(res.response.venue.name.toString());
-            //var lat = res.response.venue.location.lat;
-            //var long = res.response.venue.location.lng;
-            //console.log('lat' + lat);
-            //console.log('lng' + long);
-            //var position = {lat:lat, lng:long};//locations[i].location;
-            var position = res.response.venue.location;
-            var title = loc.title;//locations[i].title;
-    
-           var marker = new google.maps.Marker({
-                position: position,
-                title: title,
-                animation: google.maps.Animation.DROP,
-                id: i
-            });
-    
-            markers.push(marker);
-    
+            //addMarkerToMap(res.response.venue.location, this.title, this.index);
             
-            marker.addListener('click', function() {
-                populateInfoWindow(this, largeInfowindow);
-            });
+            this.url = res.response.venue.url;
 
-            marker.setMap(map);
+            this.marker = new google.maps.Marker({
+                position: res.response.venue.location,
+                title: this.title,
+                animation: google.maps.Animation.DROP,
+                id: this.index
+            });
+            console.log("this inside promise" + this);
+            markers.push(this.marker);
+        
+            this.marker.addListener('click', this.openInfoWindow);/*function() {
+                if (largeInfowindow.marker != marker) {
+                    
+                    largeInfowindow.marker = marker;
+                    var content = `<div>
+                                        <div>${marker.title}</div>
+                                        <div>${self.url}</div>
+                                    </div>`;
+        
+                    largeInfowindow.setContent(content);
+                    largeInfowindow.open(map, marker);
+        
+                    largeInfowindow.addListener('closeclick', function() {
+                        largeInfowindow.marker = null;
+                    });
+                }
+            });*/
+        
+            this.marker.setMap(map);
         })
         .catch((err) => {
-            alert('wtf man');
+            alert(err);
         });
     }
-    //});
+}
 
-    //for (var i = 0; i < locations.length; i++) {
-    //     var position = locations[i].location;
-    //     var title = locations[i].title;
+function addMarkerToMap(position, title, i){
+    var marker = new google.maps.Marker({
+        position: position,
+        title: title,
+        animation: google.maps.Animation.DROP,
+        id: i
+    });
 
-    //    var marker = new google.maps.Marker({
-    //         position: position,
-    //         title: title,
-    //         animation: google.maps.Animation.DROP,
-    //         id: i
-    //     });
+    markers.push(marker);
 
-    //     markers.push(marker);
+    marker.addListener('click', function() {
+        // if (largeInfowindow.marker != marker) {
+        //     largeInfowindow.marker = marker;
+        //     // var content = `<div>
+        //     //                     <div>${marker.title}</div>
+        //     //                     <div>${this.url}</div>
+        //     //                 </div>`;
 
-    //     marker.addListener('click', function() {
-    //         populateInfoWindow(this, largeInfowindow);
-    //     });
-    //}
+        //     largeInfowindow.setContent('<div>' + marker.title + '</div>');
+        //     largeInfowindow.open(map, marker);
 
-    showListings();
-    
+        //     largeInfowindow.addListener('closeclick', function() {
+        //         largeInfowindow.marker = null;
+        //     });
+        // }
+    });
+
+    marker.setMap(map);
 }
 
