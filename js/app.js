@@ -48,18 +48,23 @@ class MapViewModel{
         }, this);
 
         this.selectedModel = this.locations[0];
+        this.selectedModel.isSelected = true;
 
         this.selectedModelId = ko.observable(this.selectedModel.fourSquareId);
 
+        //when selected pin changes then change the images showing on side.
         this.selectedImages = ko.computed(function(){
             var id = this.selectedModelId();
-            var result = this.locations.find(function (loc,id2){
-                return loc.fourSquareId === id;
-            });
-            this.selectedModel = result;
-            return result.photos;
+            if(id){
+                var result = this.locations.find(function (loc,id2){
+                    return loc.fourSquareId === id;
+                });
+                this.selectedModel = result;
+                return result.photos;
+            }
         },this);
 
+        this.selectedModelId('');
         showListings();
     }
 
@@ -82,8 +87,6 @@ class MapViewModel{
             setTimeout((function() {
                 this.setAnimation(null);
             }).bind(marker), 1400);
-
-            
         }
     }
 }
@@ -95,31 +98,21 @@ class EauClairePin{
         this.fourSquareId = loc.fourSquareId;
         this.index = index;
         this.getFourSquareData(this.fourSquareId, this.title, this.index);
+        this.isSelected = false;
     }
 
     onClick(){
-
         mainViewModel.openInfoWindow(this.marker, this);
         this.marker.setAnimation(google.maps.Animation.BOUNCE);
-        //this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
-        //this.marker.setIcon('img/green pin.png');
-        //this.marker.setIcon('img/blue pin.png');
-
         this.marker.setIcon('img/green pin.png');
-        //this.setIconIfValid('img/green pin.png');
     }
 
     onHoverOver(){
-        // if(this.marker && this.fourSquareId !== mainViewModel.selectedModelId()){
-        //     this.marker.setIcon('img/blue pin.png');
-        // }
         this.setIconIfValid('img/blue pin.png');
+        //this.marker.setIcon('img/blue pin.png');
     }
 
     onMouseOut(){
-        // if(this.marker && this.fourSquareId !== mainViewModel.selectedModelId()){
-        //     this.marker.setIcon('img/red pin.png');
-        // }
         this.setIconIfValid('img/red pin.png');
     }
 
@@ -132,7 +125,6 @@ class EauClairePin{
     getFourSquareData(fourSquareId, title ,index){
         //var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=H3U143RXVFSPJE0XYGV2C2LUTZLPJVX4O3D4XKEKINMVMORJ&client_secret=GD2SHFG2LB1KWLZ45PUWKHGQ3MAW102ML3CVLOJDGKJV2UHB&v=20170413';
         var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=2G4BOAVMDDTBVKZOU0WI0IBXSQOCMDTIOWZCKXS4XO1RAC0R&client_secret=3UZMRJ1XEB1WDHZROFUCCIGDJCFMWPVRG5J4FFDWVDNHEV4K&v=20170413';
-        
         
         fetch(url)
         .then((data) => data.json())
@@ -176,6 +168,7 @@ class EauClairePin{
             this.marker.addListener('click', function(){
                 mainViewModel.openInfoWindow(this,pin);
                 this.setAnimation(google.maps.Animation.BOUNCE);
+                this.setIcon('img/green pin.png');
             });
         
             this.marker.setMap(map);
@@ -194,3 +187,7 @@ function showListings() {
     }
     //map.fitBounds(bounds);
 }
+
+$(function(){
+    
+});

@@ -12,7 +12,7 @@
         <h1>Eau Claire Neighborhood Map</h1>
         <input type="text" data-bind="value: searchString, valueUpdate: 'afterkeydown'"/> 
         <div id="list-container" >
-          <ul data-bind="template: {name:'pinTemp', foreach:filterPins }"></ul>
+          <ul class="locations" data-bind="template: {name:'pinTemp', foreach:filterPins }"></ul>
         </div>
         <div>
           <ul data-bind="template: {name:'imgTemp', foreach:selectedImages }"></ul>

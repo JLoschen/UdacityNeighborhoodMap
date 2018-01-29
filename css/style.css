@@ -52,8 +52,9 @@ ul li{
   line-height: 25px;
 }
 
-li:hover{
-  background-color:rgb(229, 229, 229);
+.locations li:hover{
+  /* background-color:rgb(229, 229, 229); */
+  background-color:rgb(158, 192, 247);
 }
 
 .options-box {
