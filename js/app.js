@@ -5,13 +5,13 @@
     var EauClaireLocations = [
         { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
         { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
-        { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
-        { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://northwoodsleague.com/eau-claire-express/team/ballpark/'}, // no good url's
-        { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
-        { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
-        { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3'},
-        { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015'},
-        { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'}
+        // { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
+        // { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://northwoodsleague.com/eau-claire-express/team/ballpark/'}, // no good url's
+        // { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
+        // { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
+        // { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3'},
+        // { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015'},
+        // { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'}
     ];
     var largeInfowindow; 
     var mainViewModel;
@@ -56,7 +56,7 @@ class MapViewModel{
             var result = this.locations.find(function (loc,id2){
                 return loc.fourSquareId === id;
             });
-
+            this.selectedModel = result;
             return result.photos;
         },this);
 
@@ -65,6 +65,9 @@ class MapViewModel{
 
     openInfoWindow(marker, clickedPin){
         if (largeInfowindow.marker != marker) {
+            
+            this.selectedModel.marker.setIcon('img/red pin.png');
+
             this.selectedModelId(clickedPin.fourSquareId);
             largeInfowindow.marker = marker;
             
@@ -79,6 +82,8 @@ class MapViewModel{
             setTimeout((function() {
                 this.setAnimation(null);
             }).bind(marker), 1400);
+
+            
         }
     }
 }
@@ -93,20 +98,41 @@ class EauClairePin{
     }
 
     onClick(){
+
         mainViewModel.openInfoWindow(this.marker, this);
         this.marker.setAnimation(google.maps.Animation.BOUNCE);
+        //this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
+        //this.marker.setIcon('img/green pin.png');
+        //this.marker.setIcon('img/blue pin.png');
+
+        this.marker.setIcon('img/green pin.png');
+        //this.setIconIfValid('img/green pin.png');
     }
 
     onHoverOver(){
-        this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
+        // if(this.marker && this.fourSquareId !== mainViewModel.selectedModelId()){
+        //     this.marker.setIcon('img/blue pin.png');
+        // }
+        this.setIconIfValid('img/blue pin.png');
     }
 
     onMouseOut(){
-        this.marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=1&color=33ff0000')
+        // if(this.marker && this.fourSquareId !== mainViewModel.selectedModelId()){
+        //     this.marker.setIcon('img/red pin.png');
+        // }
+        this.setIconIfValid('img/red pin.png');
+    }
+
+    setIconIfValid(icon){
+        if(this.marker && this.fourSquareId !== mainViewModel.selectedModelId()){
+            this.marker.setIcon(icon);
+        }
     }
 
     getFourSquareData(fourSquareId, title ,index){
-        var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=H3U143RXVFSPJE0XYGV2C2LUTZLPJVX4O3D4XKEKINMVMORJ&client_secret=GD2SHFG2LB1KWLZ45PUWKHGQ3MAW102ML3CVLOJDGKJV2UHB&v=20170413';
+        //var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=H3U143RXVFSPJE0XYGV2C2LUTZLPJVX4O3D4XKEKINMVMORJ&client_secret=GD2SHFG2LB1KWLZ45PUWKHGQ3MAW102ML3CVLOJDGKJV2UHB&v=20170413';
+        var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=2G4BOAVMDDTBVKZOU0WI0IBXSQOCMDTIOWZCKXS4XO1RAC0R&client_secret=3UZMRJ1XEB1WDHZROFUCCIGDJCFMWPVRG5J4FFDWVDNHEV4K&v=20170413';
+        
         
         fetch(url)
         .then((data) => data.json())
@@ -137,6 +163,7 @@ class EauClairePin{
             this.marker = new google.maps.Marker({
                 position: venue.location,
                 title: this.title,
+                icon: 'img/red pin.png',
                 //title:venue.name,
                 animation: google.maps.Animation.DROP,
                 //animation:google.maps.Animation.BOUNCE,
