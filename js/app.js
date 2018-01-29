@@ -22,6 +22,7 @@
         //{title: 'Dean & Sue\'s Bar & Grill', fourSquareId: '4e18dac5d1648b8348372829'}
     ];
     var largeInfowindow; 
+    var mainViewModel;
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -32,26 +33,104 @@
 
         largeInfowindow = new google.maps.InfoWindow();
 
-        ko.applyBindings(new MapViewModel(EauClaireLocations));
+        mainViewModel = new MapViewModel(EauClaireLocations)
+        ko.applyBindings(mainViewModel);
     }
 
-function MapViewModel(EauClaireLocations){
-    this.allLocations = EauClaireLocations;
-    this.searchString = ko.observable('');
+// function MapViewModel(EauClaireLocations){
+//     this.allLocations = EauClaireLocations;
+//     this.searchString = ko.observable('');
 
-     //stack overflow with the code for filtering in knockout
-     //https://stackoverflow.com/questions/29551997/knockout-search-filter
-    this.filterPins = ko.computed(function () {
-        var search = this.searchString().toLowerCase();
-        return ko.utils.arrayFilter(this.allLocations, function (pin) {
-            return pin.title.toLowerCase().indexOf(search) >= 0;
-        });
-    }, this);
+//      //stack overflow with the code for filtering in knockout
+//      //https://stackoverflow.com/questions/29551997/knockout-search-filter
+//     this.filterPins = ko.computed(function () {
+//         var search = this.searchString().toLowerCase();
+//         return ko.utils.arrayFilter(this.allLocations, function (pin) {
+//             return pin.title.toLowerCase().indexOf(search) >= 0;
+//         });
+//     }, this);
 
-    for(let i = 0; i < EauClaireLocations.length; i++){
-        var result = new EauClairePin(EauClaireLocations[i], i);
+//     for(let i = 0; i < EauClaireLocations.length; i++){
+//         var result = new EauClairePin(EauClaireLocations[i], i);
+//     }
+
+//     this.selectedImages = ko.observableArray([]);
+//     showListings();
+
+
+// }
+function findPinById(id) { 
+    return fruit.name === 'cherries';
+}
+
+class MapViewModel{
+    constructor(EauClaireLocations){
+        this.allLocations = EauClaireLocations;
+        this.searchString = ko.observable('');
+    
+         //stack overflow with the code for filtering in knockout
+         //https://stackoverflow.com/questions/29551997/knockout-search-filter
+        this.filterPins = ko.computed(function () {
+            var search = this.searchString().toLowerCase();
+            return ko.utils.arrayFilter(this.allLocations, function (pin) {
+                return pin.title.toLowerCase().indexOf(search) >= 0;
+            });
+        }, this);
+    
+        this.locations = [];
+        for(let i = 0; i < EauClaireLocations.length; i++){
+            this.locations.push(new EauClairePin(EauClaireLocations[i], i));
+        }
+    
+        //this.selectedImages = ko.observableArray([]);
+
+        this.selectedModel = this.locations[0];
+        //this.selectedModel = ko.observable(this.locations[0]);
+        this.selectedModelId = ko.observable(this.selectedModel.fourSquareId);
+
+        this.selectedImages = ko.computed(function(){
+            //var result = this.selectedModel().photos;
+            //console.log(result);
+            var id = this.selectedModelId();
+            //console.log('on selected pin changed ' + id);
+
+            var result = this.locations.find(function (loc,id2){
+                return loc.fourSquareId === id;
+            });
+            console.log('result ' + result.photos);
+
+            //return ['cheese', 'bread'];
+            return result.photos;
+            
+        },this);
+        showListings();
     }
-    showListings();
+
+    openInfoWindow(marker, clickedPin){
+        if (largeInfowindow.marker != marker) {
+            this.selectedModelId(clickedPin.fourSquareId);
+
+            largeInfowindow.marker = marker;
+            var content = `<div>
+                                <div>${marker.title}</div>
+                                <div> <a href="${this.selectedModel.url}">${this.selectedModel.url}</a></div>
+                                <div><img src="${this.selectedModel.bestPhotoURL}"></div>
+                                <div>pics:${this.selectedModel.numPics}</div>
+                                <div>tips:${this.selectedModel.numTips}</div>
+                            </div>`;
+
+            // this.photos.forEach(function(pic){
+            //     content = content + `<img src="${pic.prefix+"100x100"+pic.suffix}">`
+            // });
+
+            largeInfowindow.setContent(content);
+            largeInfowindow.open(map, marker);
+
+            largeInfowindow.addListener('closeclick', function() {
+                largeInfowindow.marker = null;
+            });
+        }
+    }
 }
 
 class EauClairePin{
@@ -75,9 +154,9 @@ class EauClairePin{
                                 <div>tips:${this.numTips}</div>
                             </div>`;
 
-            this.photos.forEach(function(pic){
-                content = content + `<img src="${pic.prefix+"100x100"+pic.suffix}">`
-            });
+            // this.photos.forEach(function(pic){
+            //     content = content + `<img src="${pic.prefix+"100x100"+pic.suffix}">`
+            // });
 
             largeInfowindow.setContent(content);
             largeInfowindow.open(map, marker);
@@ -93,18 +172,26 @@ class EauClairePin{
         
         fetch(url)
         .then((data) => data.json())
-        .then((res) => {
-            this.url = res.response.venue.url;
-            this.numPics = res.response.venue.photos.count;
-            this.numTips = res.response.venue.tips.count;
-            this.photos = res.response.venue.photos.groups[0].items;
+        .then((result) => result.response.venue)
+        .then((venue) => {
+            this.url = venue.url;
+            this.numPics = venue.photos.count;
+            this.numTips = venue.tips.count;
+            //this.photos = venue.photos.groups[0].items;
+            var photoObjects = venue.photos.groups[0].items;
+            var photoArray = [];
+            photoObjects.forEach(function(photo){
+                photoArray.push({imgUrl: photo.prefix + "100x100" + photo.suffix });
+            });
 
-            if(res.response.venue.bestPhoto){
-                this.bestPhotoURL = res.response.venue.bestPhoto.prefix + "100x100" + res.response.venue.bestPhoto.suffix;
+            this.photos = photoArray;
+
+            if(venue.bestPhoto){
+                this.bestPhotoURL = venue.bestPhoto.prefix + "100x100" + venue.bestPhoto.suffix;
             }
             
             this.marker = new google.maps.Marker({
-                position: res.response.venue.location,
+                position: venue.location,
                 title: this.title,
                 animation: google.maps.Animation.DROP,
                 id: this.index
@@ -114,7 +201,8 @@ class EauClairePin{
 
             var pin = this;
             this.marker.addListener('click', function(){
-                pin.openInfoWindow(this);
+                //pin.openInfoWindow(this);
+                mainViewModel.openInfoWindow(this,pin);
             });
         
             this.marker.setMap(map);
@@ -130,7 +218,6 @@ function showListings() {
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(map);
         bounds.extend(markers[i].position);
-        
     }
     //map.fitBounds(bounds);
 }
