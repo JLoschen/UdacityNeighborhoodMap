@@ -26,7 +26,9 @@
     </div>
   
     <script id="pinTemp" type="text/html">
-      <li data-bind="text: title"></li> 
+      <!-- text: title -->
+      <!-- , event {mouseover: onHoverOver} -->
+      <li data-bind="text: title, event {mouseover: onHoverOver, mouseout: onMouseOut}"></li> 
     </script>
     <script id="imgTemp" type="text/html">
       <li ><img data-bind="attr:{src: imgUrl}"> </li> 

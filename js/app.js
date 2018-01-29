@@ -37,32 +37,6 @@
         ko.applyBindings(mainViewModel);
     }
 
-// function MapViewModel(EauClaireLocations){
-//     this.allLocations = EauClaireLocations;
-//     this.searchString = ko.observable('');
-
-//      //stack overflow with the code for filtering in knockout
-//      //https://stackoverflow.com/questions/29551997/knockout-search-filter
-//     this.filterPins = ko.computed(function () {
-//         var search = this.searchString().toLowerCase();
-//         return ko.utils.arrayFilter(this.allLocations, function (pin) {
-//             return pin.title.toLowerCase().indexOf(search) >= 0;
-//         });
-//     }, this);
-
-//     for(let i = 0; i < EauClaireLocations.length; i++){
-//         var result = new EauClairePin(EauClaireLocations[i], i);
-//     }
-
-//     this.selectedImages = ko.observableArray([]);
-//     showListings();
-
-
-// }
-function findPinById(id) { 
-    return fruit.name === 'cherries';
-}
-
 class MapViewModel{
     constructor(EauClaireLocations){
         this.allLocations = EauClaireLocations;
@@ -70,65 +44,57 @@ class MapViewModel{
     
          //stack overflow with the code for filtering in knockout
          //https://stackoverflow.com/questions/29551997/knockout-search-filter
-        this.filterPins = ko.computed(function () {
-            var search = this.searchString().toLowerCase();
-            return ko.utils.arrayFilter(this.allLocations, function (pin) {
-                return pin.title.toLowerCase().indexOf(search) >= 0;
-            });
-        }, this);
+        // this.filterPins = ko.computed(function () {
+        //     var search = this.searchString().toLowerCase();
+        //     return ko.utils.arrayFilter(this.allLocations, function (pin) {
+        //         return pin.title.toLowerCase().indexOf(search) >= 0;
+        //     });
+        // }, this);
     
         this.locations = [];
         for(let i = 0; i < EauClaireLocations.length; i++){
             this.locations.push(new EauClairePin(EauClaireLocations[i], i));
         }
-    
-        //this.selectedImages = ko.observableArray([]);
+
+        this.filterPins = ko.computed(function () {
+            var search = this.searchString().toLowerCase();
+            return ko.utils.arrayFilter(this.locations, function (pin) {
+                return pin.title.toLowerCase().indexOf(search) >= 0;
+            });
+        }, this);
 
         this.selectedModel = this.locations[0];
-        //this.selectedModel = ko.observable(this.locations[0]);
+
         this.selectedModelId = ko.observable(this.selectedModel.fourSquareId);
 
         this.selectedImages = ko.computed(function(){
-            //var result = this.selectedModel().photos;
-            //console.log(result);
             var id = this.selectedModelId();
-            //console.log('on selected pin changed ' + id);
-
             var result = this.locations.find(function (loc,id2){
                 return loc.fourSquareId === id;
             });
-            console.log('result ' + result.photos);
 
-            //return ['cheese', 'bread'];
             return result.photos;
-            
         },this);
+
         showListings();
     }
 
     openInfoWindow(marker, clickedPin){
         if (largeInfowindow.marker != marker) {
             this.selectedModelId(clickedPin.fourSquareId);
-
             largeInfowindow.marker = marker;
-            var content = `<div>
-                                <div>${marker.title}</div>
-                                <div> <a href="${this.selectedModel.url}">${this.selectedModel.url}</a></div>
-                                <div><img src="${this.selectedModel.bestPhotoURL}"></div>
-                                <div>pics:${this.selectedModel.numPics}</div>
-                                <div>tips:${this.selectedModel.numTips}</div>
-                            </div>`;
-
-            // this.photos.forEach(function(pic){
-            //     content = content + `<img src="${pic.prefix+"100x100"+pic.suffix}">`
-            // });
-
-            largeInfowindow.setContent(content);
+            
+            largeInfowindow.setContent(clickedPin.infoWindowContent);
             largeInfowindow.open(map, marker);
 
             largeInfowindow.addListener('closeclick', function() {
                 largeInfowindow.marker = null;
             });
+
+            //stop bouncing after 1.4 seconds (about 2 bounces)
+            setTimeout((function() {
+                this.setAnimation(null);
+            }).bind(marker), 1400);
         }
     }
 }
@@ -140,30 +106,21 @@ class EauClairePin{
         this.fourSquareId = loc.fourSquareId;
         this.index = index;
         this.getFourSquareData(this.fourSquareId, this.title, this.index);
-    }
 
-     openInfoWindow(marker){
-        if (largeInfowindow.marker != marker) {
-            
-            largeInfowindow.marker = marker;
-            var content = `<div>
-                                <div>${marker.title}</div>
-                                <div> <a href="${this.url}">${this.url}</a></div>
-                                <div><img src="${this.bestPhotoURL}"></div>
-                                <div>pics:${this.numPics}</div>
-                                <div>tips:${this.numTips}</div>
-                            </div>`;
+        this.onHoverOver = function(){
+            //https://mt.google.com/vt/icon/text=A&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1
+            //this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+            //this.marker.setIcon('https://mt.google.com/vt/icon/&psize=16&font=fonts/arialuni_t.ttf&color=00000000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1');
+            this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
+            //this.marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=1&color=33ff0000')
+        };
 
-            // this.photos.forEach(function(pic){
-            //     content = content + `<img src="${pic.prefix+"100x100"+pic.suffix}">`
-            // });
-
-            largeInfowindow.setContent(content);
-            largeInfowindow.open(map, marker);
-
-            largeInfowindow.addListener('closeclick', function() {
-                largeInfowindow.marker = null;
-            });
+        this.onMouseOut = function(){
+            //http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•
+            //this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-circle.png')
+            //this.marker.setIcon('https://mt.google.com/vt/icon/text=•&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1')
+            //this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
+            this.marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=1&color=33ff0000')
         }
     }
 
@@ -174,14 +131,11 @@ class EauClairePin{
         .then((data) => data.json())
         .then((result) => result.response.venue)
         .then((venue) => {
-            this.url = venue.url;
-            this.numPics = venue.photos.count;
-            this.numTips = venue.tips.count;
-            //this.photos = venue.photos.groups[0].items;
+            
             var photoObjects = venue.photos.groups[0].items;
             var photoArray = [];
             photoObjects.forEach(function(photo){
-                photoArray.push({imgUrl: photo.prefix + "100x100" + photo.suffix });
+                photoArray.push({imgUrl: photo.prefix + "300x300" + photo.suffix });
             });
 
             this.photos = photoArray;
@@ -189,11 +143,22 @@ class EauClairePin{
             if(venue.bestPhoto){
                 this.bestPhotoURL = venue.bestPhoto.prefix + "100x100" + venue.bestPhoto.suffix;
             }
+
+            this.infoWindowContent 
+                    = `<div>
+                            <div>${venue.name}</div>
+                            <div> <a href="${venue.url}">${venue.url}</a></div>
+                            <div><img class="info-image" src="${this.bestPhotoURL}"></div>
+                            <div>pics:${venue.photos.count}</div>
+                            <div>tips:${venue.tips.count}</div>
+                        </div>`;
             
             this.marker = new google.maps.Marker({
                 position: venue.location,
                 title: this.title,
+                //title:venue.name,
                 animation: google.maps.Animation.DROP,
+                //animation:google.maps.Animation.BOUNCE,
                 id: this.index
             });
             
@@ -201,8 +166,8 @@ class EauClairePin{
 
             var pin = this;
             this.marker.addListener('click', function(){
-                //pin.openInfoWindow(this);
                 mainViewModel.openInfoWindow(this,pin);
+                this.setAnimation(google.maps.Animation.BOUNCE);
             });
         
             this.marker.setMap(map);
@@ -211,6 +176,11 @@ class EauClairePin{
             alert(err);
         });
     }
+
+    // onHoverOver(){
+    //     console.log('on hover over');
+    //     console.log(this);
+    // }
 }
 
 function showListings() {
