@@ -3,23 +3,15 @@
     var markers = [];
 
     var EauClaireLocations = [
-        //{ title: 'Highland Fitness', fourSquareId: '4c88f0c9da5da1cdb60838e9'},
-        //{title: 'Golden Dragon Chinese Restaurant', fourSquareId: '4e4e5a14bd4101d0d7a85286'},
-        // 4b742cd8f964a5203ccb2de3
-        // lower campus 9 pics 4d7e7bb795c1a143f65dd2f2
         { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
-        //{title: 'Wagner\'s Lanes', fourSquareId: '4b83363bf964a5209afd30e3'},
         { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
         { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
         { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://northwoodsleague.com/eau-claire-express/team/ballpark/'}, // no good url's
-        //{title: 'The District Company', fourSquareId: '51bb8cd0498e9ac0b653d06f'},
-        //{ title: 'Eau Claire YMCA', fourSquareId: '4c4b6fa25609c9b6ae5b1d91'},
         { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
         { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
         { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3'},
         { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015'},
         { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'}
-        //{title: 'Dean & Sue\'s Bar & Grill', fourSquareId: '4e18dac5d1648b8348372829'}
     ];
     var largeInfowindow; 
     var mainViewModel;
@@ -42,14 +34,6 @@ class MapViewModel{
         this.allLocations = EauClaireLocations;
         this.searchString = ko.observable('');
     
-         //stack overflow with the code for filtering in knockout
-         //https://stackoverflow.com/questions/29551997/knockout-search-filter
-        // this.filterPins = ko.computed(function () {
-        //     var search = this.searchString().toLowerCase();
-        //     return ko.utils.arrayFilter(this.allLocations, function (pin) {
-        //         return pin.title.toLowerCase().indexOf(search) >= 0;
-        //     });
-        // }, this);
     
         this.locations = [];
         for(let i = 0; i < EauClaireLocations.length; i++){
@@ -106,22 +90,19 @@ class EauClairePin{
         this.fourSquareId = loc.fourSquareId;
         this.index = index;
         this.getFourSquareData(this.fourSquareId, this.title, this.index);
+    }
 
-        this.onHoverOver = function(){
-            //https://mt.google.com/vt/icon/text=A&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1
-            //this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
-            //this.marker.setIcon('https://mt.google.com/vt/icon/&psize=16&font=fonts/arialuni_t.ttf&color=00000000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1');
-            this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
-            //this.marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=1&color=33ff0000')
-        };
+    onClick(){
+        mainViewModel.openInfoWindow(this.marker, this);
+        this.marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
 
-        this.onMouseOut = function(){
-            //http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•
-            //this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-circle.png')
-            //this.marker.setIcon('https://mt.google.com/vt/icon/text=•&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1')
-            //this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
-            this.marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=1&color=33ff0000')
-        }
+    onHoverOver(){
+        this.marker.setIcon('http://mt.google.com/vt/icon?psize=27&font=fonts/Roboto-Bold.ttf&color=ff135C13&name=icons/spotlight/spotlight-waypoint-a.png&ax=43&ay=50&text=•')
+    }
+
+    onMouseOut(){
+        this.marker.setIcon('http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=1&color=33ff0000')
     }
 
     getFourSquareData(fourSquareId, title ,index){
@@ -176,11 +157,6 @@ class EauClairePin{
             alert(err);
         });
     }
-
-    // onHoverOver(){
-    //     console.log('on hover over');
-    //     console.log(this);
-    // }
 }
 
 function showListings() {
@@ -190,10 +166,4 @@ function showListings() {
         bounds.extend(markers[i].position);
     }
     //map.fitBounds(bounds);
-}
-
-function hideListings() {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-    }
 }

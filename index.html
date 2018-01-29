@@ -10,10 +10,6 @@
     <div class="container">
       <div class="options-box">
         <h1>Eau Claire Neighborhood Map</h1>
-        <div>
-          <button id="show-listings">Show Listings</button>
-          <button id="hide-listings">Hide Listings</button>
-        </div> 
         <input type="text" data-bind="value: searchString, valueUpdate: 'afterkeydown'"/> 
         <div id="list-container" >
           <ul data-bind="template: {name:'pinTemp', foreach:filterPins }"></ul>
@@ -26,9 +22,7 @@
     </div>
   
     <script id="pinTemp" type="text/html">
-      <!-- text: title -->
-      <!-- , event {mouseover: onHoverOver} -->
-      <li data-bind="text: title, event {mouseover: onHoverOver, mouseout: onMouseOut}"></li> 
+      <li data-bind="text: title, event {mouseover: onHoverOver, mouseout: onMouseOut, click: onClick}"></li> 
     </script>
     <script id="imgTemp" type="text/html">
       <li ><img data-bind="attr:{src: imgUrl}"> </li> 
