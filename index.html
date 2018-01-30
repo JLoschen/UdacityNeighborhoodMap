@@ -12,7 +12,7 @@
         <h1>Eau Claire Neighborhood Map</h1>
         <input type="text" data-bind="value: searchString, valueUpdate: 'afterkeydown'"/> 
         <div id="list-container" >
-          <ul class="locations" data-bind="template: {name:'pinTemp', foreach:filterPins }"></ul>
+          <ul class="locations" id="locationsList" data-bind="template: {name:'pinTemp', foreach:filterPins }"></ul>
         </div>
         <div>
           <ul data-bind="template: {name:'imgTemp', foreach:selectedImages }"></ul>
@@ -22,7 +22,8 @@
     </div>
   
     <script id="pinTemp" type="text/html">
-      <li data-bind="text: title, event {mouseover: onHoverOver, mouseout: onMouseOut, click: onClick}"></li> 
+      <li data-bind="text: title, event {mouseover: onHoverOver, mouseout: onMouseOut, click: onClick}, 
+      css: {selected: isSelected() == true}"></li> 
     </script>
     <script id="imgTemp" type="text/html">
       <li ><img data-bind="attr:{src: imgUrl}"> </li> 

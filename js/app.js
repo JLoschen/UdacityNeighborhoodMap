@@ -48,7 +48,8 @@ class MapViewModel{
         }, this);
 
         this.selectedModel = this.locations[0];
-        this.selectedModel.isSelected = true;
+        //this.selectedModel.isSelected = true;
+        this.selectedModel.isSelected(true);
 
         this.selectedModelId = ko.observable(this.selectedModel.fourSquareId);
 
@@ -72,6 +73,7 @@ class MapViewModel{
         if (largeInfowindow.marker != marker) {
             
             this.selectedModel.marker.setIcon('img/red pin.png');
+            this.selectedModel.isSelected(false);
 
             this.selectedModelId(clickedPin.fourSquareId);
             largeInfowindow.marker = marker;
@@ -98,13 +100,14 @@ class EauClairePin{
         this.fourSquareId = loc.fourSquareId;
         this.index = index;
         this.getFourSquareData(this.fourSquareId, this.title, this.index);
-        this.isSelected = false;
+        this.isSelected = ko.observable(false);
     }
 
     onClick(){
         mainViewModel.openInfoWindow(this.marker, this);
         this.marker.setAnimation(google.maps.Animation.BOUNCE);
         this.marker.setIcon('img/green pin.png');
+        this.isSelected(true);
     }
 
     onHoverOver(){
