@@ -58,7 +58,7 @@ ul li{
 }
 
 #locationsList .selected{
-  background-color:green;
+  background-color:rgb(106, 174, 0);
 }
 
 .options-box {

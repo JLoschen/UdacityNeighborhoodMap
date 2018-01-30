@@ -49,7 +49,7 @@ class MapViewModel{
 
         this.selectedModel = this.locations[0];
         //this.selectedModel.isSelected = true;
-        this.selectedModel.isSelected(true);
+        this.selectedModel.isSelected(false);
 
         this.selectedModelId = ko.observable(this.selectedModel.fourSquareId);
 
@@ -111,8 +111,9 @@ class EauClairePin{
     }
 
     onHoverOver(){
-        this.setIconIfValid('img/blue pin.png');
-        //this.marker.setIcon('img/blue pin.png');
+        // this.setIconIfValid('img/blue pin.png');
+        //this.marker.setIcon('img/light blue pin.png');
+        this.setIconIfValid('img/light blue pin.png');
     }
 
     onMouseOut(){
