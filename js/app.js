@@ -1,14 +1,12 @@
-  
-
-    var EauClaireLocations = [
-        // { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
-        // { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
-        // { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
-        // { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/'}, 
-        // { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
-        // { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
-         { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3' , defaultUrl:'https://www.visiteauclaire.com/listings/phoenix-park/1898/'},
-         { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015', defaultUrl:'http://www.banbury.com/'},
+  var EauClaireLocations = [
+        { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
+        { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
+        { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
+        { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/'}, 
+        { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
+        { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
+        { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3' , defaultUrl:'https://www.visiteauclaire.com/listings/phoenix-park/1898/'},
+        { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015', defaultUrl:'http://www.banbury.com/'},
         { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'}
     ];
     var largeInfowindow; 
@@ -18,16 +16,20 @@
     var markers = [];
 
     function initMap() {
+
         map = new google.maps.Map(document.getElementById('map'), {
             center: {lat:44.805463, lng: -91.506933},//Eau Claire WI
-            zoom: 15,
-            mapTypeControl: false
+            zoom: 15
         });
 
         largeInfowindow = new google.maps.InfoWindow();
 
         mainViewModel = new MapViewModel(EauClaireLocations)
         ko.applyBindings(mainViewModel);
+    }
+
+    function setMapStyle(style){
+        map.setOptions({styles:style});
     }
 
 class MapViewModel{
@@ -50,6 +52,12 @@ class MapViewModel{
 
         this.selectedModel = this.locations[0];
         this.selectedModelId = ko.observable(this.selectedModel.fourSquareId);
+
+        this.SelectedStyle = ko.observable();
+
+        this.SelectedStyle.subscribe(function(newStyle){
+            setMapStyle(newStyle.style);
+        });
 
         this.selectedModelId('');
         //when selected pin changes then change the images showing on side.

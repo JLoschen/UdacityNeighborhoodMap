@@ -2,9 +2,9 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet prefetch">
     <script src="js/knockout-latest.js"></script> 
+    <script src="js/map-styles.js"></script> 
     <script src="js/app.js"></script>
   </head>
   <body>
@@ -12,6 +12,9 @@
       <div class="options-box">
         <h1>Neighborhood Map</h1>
         <h2>Eau Claire WI</h2>
+        <div style="align-content: center;" align="center">
+          <span>Map Style:<select data-bind="options:mapStyles, optionsText: 'name', value: SelectedStyle "></select></span>
+      </div>
         <hr>
         <div class="search-form">
             <form action="#">
@@ -25,8 +28,8 @@
         <div id="list-container" >
           <ul class="locations" id="locationsList" data-bind="template: {name:'pinTemp', foreach:filterPins }"></ul>
         </div>
-        <hr>
-        <h4 id="pic-heading">Top 6 pictures</h4>
+        <hr data-bind="visible: selectedModelId() != ''">
+        <h4 data-bind="visible: selectedModelId() != ''" id="pic-heading">Top 6 pictures</h4>
         <div id="pic-container">
           <ul id="pic-list" data-bind="template: {name:'imgTemp', foreach:selectedImages }"></ul>
         </div>
