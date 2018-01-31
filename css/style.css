@@ -21,27 +21,16 @@ input {
   width: 100px;
 }
 
-h1 {
+h1, h2{
   font-size: 22px;
-  margin: 0 0 0px 0;
+  margin: 0;
   text-align: center;
-}
-
-h2 {
-  font-size: 22px;
-  margin: 0 0 0px 0;
-  text-align: center;
-}
-
-#hide-listings,
-#show-listings {
-  width: 48%;
 }
 
 #map {
   bottom:0px;
   height: 100%;
-  left: 317px;
+  left: 320px;
   position: absolute;
   right: 0px;
 }
@@ -62,7 +51,6 @@ ul{
 
 hr{
   height:2px;
-  width:100%;
   background-color: darkgray;
   margin:3px 0px 5px 0px;
 }
@@ -81,8 +69,8 @@ hr{
 
 .options-box {
   background-color: lightgray;
-  border: 1px solid rgb(149, 199, 155);
-  border-radius: 3px;
+  border: 1px solid rgb(5, 5, 5);
+  border-width: 0px 3px 1px 0px;
   height: 100%;
   line-height: 30px;
   text-align: left;
