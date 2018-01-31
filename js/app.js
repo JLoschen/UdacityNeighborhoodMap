@@ -1,6 +1,6 @@
   var EauClaireLocations = [
-        { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
-        { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
+         { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
+        // { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
         //{ title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
         // { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/'}, 
         // { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
@@ -19,7 +19,11 @@
 
         map = new google.maps.Map(document.getElementById('map'), {
             center: {lat:44.805463, lng: -91.506933},//Eau Claire WI
-            zoom: 15
+            zoom: 15,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_RIGHT
+            }
         });
 
         largeInfowindow = new google.maps.InfoWindow();
@@ -71,6 +75,18 @@ class MapViewModel{
                 return result.photos;
             }
         },this);
+
+        this.showSideBar = ko.observable(true);
+    }
+
+    toggleSidebar(){
+        this.showSideBar(!this.showSideBar());
+
+        //make sure map resizes when flyout menu hides
+        setTimeout((function() {
+            google.maps.event.trigger(map, "resize");
+        }), 505);
+        
     }
 
     openInfoWindow(marker, clickedPin){

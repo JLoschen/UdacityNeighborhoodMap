@@ -8,8 +8,6 @@ body {
 
 .container {
   height: 100%;
-  position: relative;
-  overflow:hidden;
 }
 
 input {
@@ -30,9 +28,10 @@ h1, h2{
 #map {
   bottom:0px;
   height: 100%;
-  left: 320px;
+  left: 0px;
   position: absolute;
   right: 0px;
+  transition: all 500ms linear;
 }
 
 ul{
@@ -67,16 +66,45 @@ hr{
   height:235px;
 }
 
-.options-box {
+#options-box {
   background-color: lightgray;
   border: 1px solid rgb(5, 5, 5);
   border-width: 0px 3px 1px 0px;
   height: 100%;
   line-height: 30px;
   text-align: left;
-  width: 317px;  
   display:flex;
   flex-direction:column;
+  position: absolute;
+  width: 317px;  
+  left: -317px;
+  transition: all 500ms linear;
+}
+
+/* options box fly out */
+#options-box.active{
+  left:0px;  
+}
+
+/* Hamburger flyout button */
+#hamburger-btn{
+  position:fixed;
+  border-radius: 7px;
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgb(65, 65, 65);
+  cursor: pointer;
+  left: 5px;
+  top: 10px;
+  transition: left 500ms linear;
+}
+
+#hamburger-btn.active{
+  left:325px;  
+}
+
+#hamburger-btn:hover{
+  background-color: gray;
 }
 
 #pic-container{
@@ -149,7 +177,9 @@ input {
   right: 0;
   margin-left:5px;
 }
-button {
+
+#search-btn {
+/* button { */
   position: absolute;
   height: 35px;
   width: 35px;
@@ -160,3 +190,5 @@ button {
   right: 9px;
   top: 3px;
 }
+
+
