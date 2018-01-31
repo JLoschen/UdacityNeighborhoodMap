@@ -10,10 +10,9 @@
   <body>
     <div class="container">
       <div class="options-box">
-        <!-- <h1>Eau Claire Neighborhood Map</h1> -->
         <h1>Neighborhood Map</h1>
         <h2>Eau Claire WI</h2>
-        <!-- <input type="text" data-bind="value: searchString, valueUpdate: 'afterkeydown'"/>  -->
+        <hr>
         <div class="search-form">
             <form action="#">
                 <input type="text" placeholder="Search" data-bind="value: searchString, valueUpdate: 'afterkeydown'">
@@ -22,9 +21,12 @@
                 </button>
             </form>
         </div>
+        
         <div id="list-container" >
           <ul class="locations" id="locationsList" data-bind="template: {name:'pinTemp', foreach:filterPins }"></ul>
         </div>
+        <hr>
+        <h4 id="pic-heading">Top 6 pictures</h4>
         <div id="pic-container">
           <ul id="pic-list" data-bind="template: {name:'imgTemp', foreach:selectedImages }"></ul>
         </div>

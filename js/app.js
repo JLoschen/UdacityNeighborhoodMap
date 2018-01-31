@@ -5,14 +5,13 @@
     var EauClaireLocations = [
         { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
         { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
-        // { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
-        // //{ title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://northwoodsleague.com/eau-claire-express/team/ballpark/'}, // no good url's  https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/
-        // { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/'}, // no good url's  
-        // { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
-        // { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
-        // { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3' , defaultUrl:'https://www.visiteauclaire.com/listings/phoenix-park/1898/'},
-        // { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015', defaultUrl:'http://www.banbury.com/'},
-        // { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'}
+        { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
+        { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/'}, 
+        { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
+        { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
+        { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3' , defaultUrl:'https://www.visiteauclaire.com/listings/phoenix-park/1898/'},
+        { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015', defaultUrl:'http://www.banbury.com/'},
+        { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'}
     ];
     var largeInfowindow; 
     var mainViewModel;
@@ -48,7 +47,7 @@ class MapViewModel{
         }, this);
 
         this.selectedModel = this.locations[0];
-        //this.selectedModel.isSelected = true;
+        
         this.selectedModel.isSelected(false);
 
         this.selectedModelId = ko.observable(this.selectedModel.fourSquareId);
@@ -112,8 +111,6 @@ class EauClairePin{
     }
 
     onHoverOver(){
-        // this.setIconIfValid('img/blue pin.png');
-        //this.marker.setIcon('img/light blue pin.png');
         this.setIconIfValid('img/light blue pin.png');
     }
 
@@ -155,7 +152,7 @@ class EauClairePin{
             }
 
             this.infoWindowContent 
-                    =  `<div style="max-width:350px;">
+                    =  `<div style="max-width:360px;">
                             <h3 class="venue-name">${venue.name}</h3>
                             <div class="info-window">
                                 <div>
@@ -202,9 +199,4 @@ function showListings() {
         markers[i].setMap(map);
         bounds.extend(markers[i].position);
     }
-    //map.fitBounds(bounds);
 }
-
-$(function(){
-    
-});
