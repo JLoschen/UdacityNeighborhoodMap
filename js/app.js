@@ -49,8 +49,11 @@ class MapViewModel{
         this.searchString = ko.observable('');
         this.filterPins = ko.computed(function () {
             var search = this.searchString().toLowerCase();
-            return ko.utils.arrayFilter(this.locations, function (pin) {
-                return pin.title.toLowerCase().indexOf(search) >= 0;
+            
+            return  ko.utils.arrayFilter(this.locations, function (pin) {
+                var matchesSearch = pin.title.toLowerCase().indexOf(search) >= 0;
+                pin.setMapPin(matchesSearch);
+                return matchesSearch;
             });
         }, this);
 
@@ -149,6 +152,12 @@ class EauClairePin{
         }
     }
 
+    setMapPin(pinOnMap){
+        if(this.marker){
+            this.marker.setMap((pinOnMap ? map : null));
+        }
+    }
+
     getFourSquareData(fourSquareId, title ){
         var url = 'https://api.foursquare.com/v2/venues/' + fourSquareId + '?client_id=H3U143RXVFSPJE0XYGV2C2LUTZLPJVX4O3D4XKEKINMVMORJ&client_secret=GD2SHFG2LB1KWLZ45PUWKHGQ3MAW102ML3CVLOJDGKJV2UHB&v=20170413';
         
@@ -209,7 +218,7 @@ class EauClairePin{
             this.marker.setMap(map);
         })
         .catch((err) => {
-            alert(err);
+            alert("There was an error loading data from Four Square for " + this.title);
         });
     }
 }

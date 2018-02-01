@@ -43,7 +43,6 @@ ul{
 .locations  li{
   cursor: pointer;
   padding-left:10px;
-  /* border-radius: 5px; */
   line-height: 25px;
   font-size: 18px;
   font-weight: 500;
@@ -54,7 +53,7 @@ ul{
 hr{
   height:2px;
   background-color: darkgray;
-  margin:3px 0px 5px 0px;
+  margin:9px 0px 5px 0px;
 }
 
 .locations li:hover{
