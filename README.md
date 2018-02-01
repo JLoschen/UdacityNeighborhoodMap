@@ -20,3 +20,11 @@ You can see a live version [here](https://jloschen.github.io/NeighborhoodMap/ind
 ## How to Run Locally
 1. [Download](https://github.com/JLoschen/UdacityNeighborhoodMap/archive/master.zip) or [Clone](https://github.com/JLoschen/UdacityNeighborhoodMap.git) the Repository.
 2. Double click the `index.html` file to view the project in your browser.
+
+## Resources I used
+* Side bar flyout tutorial https://www.youtube.com/watch?v=uWUNZ4u1VLA
+* Dark Roads and Retro LandMarks map styles https://mapstyle.withgoogle.com/
+* Water Only and Roads Only Map styles https://snazzymaps.com/
+* Knockout JS arrayFilter https://stackoverflow.com/questions/29551997/knockout-search-filter
+* The pluralsight.com courses 'Knockout Fundamentals' and 'Knockout for the XAML Developer'.
+* Styling the filter text box https://www.youtube.com/watch?v=xE92oKJAskE
