@@ -168,7 +168,6 @@ input {
   background:#fff;
   font-size: 18px;
   border: none;
-  /* border-radius: 40px; */
   border-radius: 7px;
   outline: 0;
   font-family: "Dosis", sans-serif;
@@ -193,4 +192,15 @@ input {
   top: 3px;
 }
 
+#foursquare-button{
+  position: absolute;
+  right: 40px;
+  bottom: 10px;
+  background-color: transparent;
+  border:none;
+  cursor:pointer;
+}
 
+#foursquare-button:hover{
+  background-color: rgba(125, 125, 125, 0.3);
+}

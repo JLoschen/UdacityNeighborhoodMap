@@ -41,12 +41,16 @@
       <button type="submit" id="hamburger-btn" data-bind="event {click: toggleSidebar},css: {active: showSideBar()}">
           <i class="fa fa-2x fa-bars"></i>        
       </button>
-      
+      <button type="submit" id="foursquare-button" >
+          <a href="https://foursquare.com/">
+            <img src="img/powered-by-foursquare.png" alt="powered by foursquare">
+          </a>
+      </button>
     </div>
   
     <script id="pinTemp" type="text/html">
       <li data-bind="text: title, event {mouseover: onHoverOver, mouseout: onMouseOut, click: onClick}, 
-      css: {selected: isSelected()}"></li> 
+          css: {selected: isSelected()}"></li> 
       
     </script>
     <script id="imgTemp" type="text/html">
