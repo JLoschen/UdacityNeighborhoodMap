@@ -1,13 +1,13 @@
   var EauClaireLocations = [
-         { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
-        { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
+        { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015', defaultUrl:'http://www.banbury.com/'},
         { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
-        { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/'}, 
+        { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3' , defaultUrl:'https://www.visiteauclaire.com/listings/phoenix-park/1898/'},
+        { title: 'The Informalist', fourSquareId: '57229631cd1010835c5139a0', defaultUrl: 'http://theinformalist.com'},
         { title: 'Eau Claire Children\'s Museum', fourSquareId: '4c5adf90d3aee21e65b76b55', defaultUrl:'http://www.childrensmuseumec.com'},
         { title: 'Acoustic Cafe', fourSquareId: '4b7c4b8ff964a520668a2fe3'},
-        { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3' , defaultUrl:'https://www.visiteauclaire.com/listings/phoenix-park/1898/'},
-        { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015', defaultUrl:'http://www.banbury.com/'},
-        { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'}
+        { title: 'Carson Park', fourSquareId: '4bd62e257b1876b0e42f8c86', defaultUrl:'https://www.visiteauclaire.com/things-to-do/outdoors/parks/carson/'}, 
+        { title: 'The Nucleus', fourSquareId: '4720b2dcf964a520c84b1fe3'},
+        { title: 'UW-Eau Claire', fourSquareId: '4d7e7bb795c1a143f65dd2f2'},
     ];
     var largeInfowindow; 
     var mainViewModel;
