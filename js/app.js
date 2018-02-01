@@ -28,7 +28,7 @@
 
         largeInfowindow = new google.maps.InfoWindow();
 
-        mainViewModel = new MapViewModel(EauClaireLocations)
+        mainViewModel = new MapViewModel(EauClaireLocations);
         ko.applyBindings(mainViewModel);
     }
 
@@ -183,21 +183,20 @@ class EauClairePin{
             var url = venue.url ? venue.url : this.defaultUrl;
 
             //no good way to bind the google maps infowindow so cheating on mvvm by hardcoding view.
-            this.infoWindowContent 
-                    =  `<div style="max-width:360px;">
-                            <h3 class="venue-name">${venue.name}</h3>
-                            <div class="info-window">
-                                <div>
-                                    <img class="info-image" src="${this.bestPhotoURL}">
-                                </div>
-                                <div class="venue-data">
-                                    <div class="location-website"> <a href="${url}">${url}</a></div>
-                                    <div>${venue.location.formattedAddress[0]}</div>
-                                    <div>${venue.location.formattedAddress[1]}</div>
-                                    <div>${venue.location.formattedAddress[2]}</div>
-                                </div>
-                            </div>
-                        </div>`;
+            this.infoWindowContent =  `<div style="max-width:360px;">
+                                            <h3 class="venue-name">${venue.name}</h3>
+                                            <div class="info-window">
+                                                <div>
+                                                    <img class="info-image" src="${this.bestPhotoURL}">
+                                                </div>
+                                                <div class="venue-data">
+                                                    <div class="location-website"> <a href="${url}">${url}</a></div>
+                                                    <div>${venue.location.formattedAddress[0]}</div>
+                                                    <div>${venue.location.formattedAddress[1]}</div>
+                                                    <div>${venue.location.formattedAddress[2]}</div>
+                                                </div>
+                                            </div>
+                                        </div>`;
             
             this.marker = new google.maps.Marker({
                 position: venue.location,
