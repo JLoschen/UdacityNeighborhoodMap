@@ -36,6 +36,11 @@
         map.setOptions({styles:style});
     }
 
+    function onGoogleMapsError(){
+        console.log('error loading google maps, check url in index.html');
+        alert('There was an error loading google maps. Sorry for the inconvenience.');
+    }
+
 class MapViewModel{
 
     constructor(EauClaireLocations){
