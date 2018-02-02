@@ -1,4 +1,4 @@
-  var EauClaireLocations = [
+  var eauClaireLocations = [
         { title: 'Banbury Place', fourSquareId: '4c979e15f7cfa1cd9202d015', defaultUrl:'http://www.banbury.com/'},
         { title: 'Lazy Monk Brewing', fourSquareId: '4eb582a4e5e8743705159e38'},
         { title: 'Phoenix Park', fourSquareId: '4b9d6507f964a52082a936e3' , defaultUrl:'https://www.visiteauclaire.com/listings/phoenix-park/1898/'},
@@ -28,7 +28,7 @@
 
         largeInfowindow = new google.maps.InfoWindow();
 
-        mainViewModel = new MapViewModel(EauClaireLocations);
+        mainViewModel = new MapViewModel();
         ko.applyBindings(mainViewModel);
     }
 
@@ -43,9 +43,9 @@
 
 class MapViewModel{
 
-    constructor(EauClaireLocations){
+    constructor(){
         this.locations = [];
-        EauClaireLocations.forEach(function(loc){
+        eauClaireLocations.forEach(function(loc){
             this.locations.push(new EauClairePin(loc));
         },this);
 
