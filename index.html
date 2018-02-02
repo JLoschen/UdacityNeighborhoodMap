@@ -36,7 +36,9 @@
 			<div id="pic-container">
 				<ul data-bind="template: {name:'imgTemp', foreach:selectedImages }" id="pic-list"></ul>
 			</div>
-		</div><button data-bind="event {click: toggleSidebar},css: {active: showSideBar()}" id="hamburger-btn" type="submit"><i class="fa fa-2x fa-bars"></i></button> <button id="foursquare-button" type="submit"><a href="https://foursquare.com/"><img alt="powered by foursquare" src="img/powered-by-foursquare.png"></a></button>
+    </div>
+    <button data-bind="event {click: toggleSidebar},css: {active: showSideBar()}" id="hamburger-btn" type="submit"><i class="fa fa-2x fa-bars"></i></button> 
+    <button id="foursquare-button" type="submit"><a href="https://foursquare.com/"><img alt="powered by foursquare" src="img/powered-by-foursquare.png"></a></button>
 	</div>
 	<script id="pinTemp" type="text/html">
 	     <li data-bind="text: title, event {mouseover: onHoverOver, mouseout: onMouseOut, click: onClick}, 
